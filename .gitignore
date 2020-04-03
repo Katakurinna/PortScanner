@@ -1,0 +1,13 @@
+# INTELLIJ IDEA IGNORE FILES
+**.idea
+*.iml
+
+# Logs
+*.log
+*.log.lck
+**logs/
+
+# Build
+**target/
+**out/
+**.settings
