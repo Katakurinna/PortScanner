@@ -1,5 +1,10 @@
 # PortScanner
 ## Java application to scout open ports of ip address
+
+### Releases
+ - [PortScanner v1.0](https://github.com/Katakurinna/PortScanner/releases/tag/1.0)
+ 
+### How to use
 You can use this release in the following way:
 
 Adding ip minport maxport and file (if you want)
