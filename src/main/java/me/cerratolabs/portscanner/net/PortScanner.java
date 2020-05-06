@@ -1,10 +1,12 @@
-package me.cerratolabs.portscanner;
+package me.cerratolabs.portscanner.net;
 
 import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.net.Socket;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.stream.IntStream;
 
 public class PortScanner {
@@ -12,9 +14,6 @@ public class PortScanner {
     private static String ipAddress;
     private static int minPort = 0;
     private static int maxPort = 65536;
-
-    private static BufferedWriter writer;
-    private static boolean haveWriter = false;
     private static int openPortsCount = 0;
 
     public static void main(String[] args) throws IOException {
@@ -84,7 +83,7 @@ public class PortScanner {
      * that you throw an exception is taken as the port is not open and
      * returns false, but it can also be the case that the IP address is wrong.
      */
-    public static boolean isPortOpen(int port) {
+    public static boolean isPortOpen(String ipAddress, int port) {
         try {
             Socket socket = new Socket();
             socket.connect(new InetSocketAddress(ipAddress, port), 3 * 1000);
@@ -96,53 +95,14 @@ public class PortScanner {
         }
     }
 
-    /**
-     * Print a message in console, if you decide to save a file,
-     * print the message in the file too and make new line.
-     *
-     * @param message message to print (and save).
-     */
-    public static void printMessage(String message) {
-        printMessageWithoutNewLine(message);
-        if (haveWriter) {
-            try {
-                writer.newLine();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+    public static List<Integer> isPortListOpen(String ipAddress, List<Integer> portList) {
+        for (Integer port : portList) {
+            if (!isPortOpen(ipAddress, port)) portList.remove(port);
         }
+        return portList;
     }
 
-    /**
-     * Print a message in console, if you decide to save a file,
-     * print the message in the file too and dont make new line.
-     *
-     * @param message message to print (and save).
-     */
-    public static void printMessageWithoutNewLine(String message) {
-        System.out.println(message);
-        if (haveWriter) {
-            try {
-                writer.write(message);
-                writer.flush();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
-    }
+    public static 
 
-    /**
-     * Print the help messages and close the application.
-     */
-    public static void helpByParamsError() {
-        System.err.println("The command syntax is wrong.");
-        System.err.println("You can write the command in the following way:");
-        System.err.println("java -jar PortScanner-1.0.jar ipOrElseDomain minPortRange maxPortRange [file-to-save-open-ports.txt]");
-        System.err.println("java -jar PortScanner-1.0.jar 127.0.0.1 0 65535 file.txt");
-        System.err.println("or else");
-        System.err.println("java -jar PortScanner-1.0.jar ipOrElseDomain [file-to-save-open-ports.txt]");
-        System.err.println("java -jar PortScanner-1.0.jar cloudflare.com file.txt");
-        System.err.println("The file is not obligatory option.");
-        System.exit(1);
-    }
+
 }
